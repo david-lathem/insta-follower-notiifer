@@ -3,6 +3,7 @@ import puppeteer from "puppeteer";
 const browser = await puppeteer.launch({
   headless: false,
   userDataDir: "./data",
+  executablePath: "/usr/bin/chromium-browser",
 });
 
 const page = await browser.newPage();
