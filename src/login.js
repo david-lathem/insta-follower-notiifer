@@ -5,6 +5,7 @@ async function login() {
     headless: false,
     userDataDir: "./data",
     executablePath: "/usr/bin/chromium-browser",
+    args: ["--no-sandbox"],
   });
 
   const page = await browser.newPage();
