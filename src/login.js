@@ -4,7 +4,9 @@ async function login() {
   const browser = await puppeteer.launch({
     headless: false,
     userDataDir: "./data",
-    executablePath: "/usr/bin/chromium-browser",
+    ...(process.platform === "linux" && {
+      executablePath: "/usr/bin/chromium-browser",
+    }),
     args: [
       "--no-sandbox",
       `--proxy-server=https://${process.env.PROXY_HOST}:${process.env.PROXY_PORT}`,
@@ -18,7 +20,7 @@ async function login() {
     password: process.env.PROXY_PASSWORD,
   });
 
-  await page.goto("https://instagram.com/");
+  await page.goto("https://api.ipify.org/");
 
   await page.setViewport({ width: 1526, height: 698 });
 }
