@@ -9,7 +9,7 @@ async function login() {
     }),
     args: [
       "--no-sandbox",
-      `--proxy-server=https://${process.env.PROXY_HOST}:${process.env.PROXY_PORT}`,
+      `--proxy-server=http://${process.env.PROXY_HOST}:${process.env.PROXY_PORT}`,
     ],
   });
 
@@ -20,7 +20,7 @@ async function login() {
     password: process.env.PROXY_PASSWORD,
   });
 
-  await page.goto("https://api.ipify.org/");
+  await page.goto("https://www.instagram.com/");
 
   await page.setViewport({ width: 1526, height: 698 });
 }
