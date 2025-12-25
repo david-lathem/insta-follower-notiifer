@@ -27,6 +27,8 @@ exports.startBrowserAndWatch = async () => {
     ],
   });
 
+  return;
+
   const { page, ghostCursor } = await createPageWithGhostCursor(
     browser,
     INSTA_BASE_URL
