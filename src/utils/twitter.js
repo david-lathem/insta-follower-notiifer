@@ -49,16 +49,15 @@ exports.makeTweet = async (username, newFollowing, removedFollowing, image) => {
 
   console.log(content);
 
+  await twitterClient.v2.tweet(content);
   return true;
-
-  //   const r = await twitterClient.v2.me();
 };
 
 function formatUsers(users, symbol) {
   return users
     .map(
       (u) =>
-        `${symbol} ${u.username} (${u.full_name})\n` +
+        `${symbol} ${u.username} (${u.full_name || ""})\n` +
         `📎 https://instagram.com/${u.username}`
     )
     .join("\n\n");

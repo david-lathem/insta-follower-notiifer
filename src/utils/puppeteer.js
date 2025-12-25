@@ -32,24 +32,23 @@ exports.startBrowserAndWatch = async () => {
     INSTA_BASE_URL
   );
 
-  await page.setRequestInterception(true);
+  //   await page.setRequestInterception(true);
 
-  page.on("request", (request) => {
-    const url = request.url();
+  //   page.on("request", (request) => {
+  //     const url = request.url();
 
-    if (request.isInterceptResolutionHandled()) return;
+  //     if (request.isInterceptResolutionHandled()) return;
 
-    const isFollowingApi = /api\/v1\/friendships\/\d+\/following\/\?/.test(url);
+  //     const isFollowingApi = /api\/v1\/friendships\/\d+\/following\/\?/.test(url);
 
-    if (!isFollowingApi) return request.continue();
+  //     if (!isFollowingApi) return request.continue();
 
-    const newUrl = url.replace("count=12", "count=200");
+  //     const newUrl = url.replace("count=12", "count=200");
 
-    request.continue({ url: newUrl });
-  });
+  //     request.continue({ url: newUrl });
+  //   });
 
   while (true) {
-    i++;
     try {
       for (const username of config.usernames) {
         const start = Date.now();
@@ -63,8 +62,8 @@ exports.startBrowserAndWatch = async () => {
 
         console.log(`${username} took ${durationMs} ms`);
 
-        if (wasTweetMade) await setTimeout(1000 * 60 * 2);
-        if (!wasTweetMade) await setTimeout(1000 * 60 * 2);
+        if (wasTweetMade) await setTimeout(1000 * 10);
+        if (!wasTweetMade) await setTimeout(1000 * 10);
       }
     } catch (error) {
       console.error(error);
@@ -99,68 +98,68 @@ async function checkFollowingAndNotify(page, ghostCursor, username) {
   delete headers[":method"];
   delete headers[":path"];
   delete headers["priority"];
+  delete headers["x-web-session-id"];
+  delete headers["x-web-session-id"];
+  delete headers["x-ig-www-claim"];
 
   console.log(headers);
 
-  const parsedRes = await firstResponse.json();
+  const fetchedUsers = await page.evaluate(
+    async ({ headers, userId, INSTA_BASE_URL }) => {
+      let after = null;
+      let hasNext = true;
+      const followings = [];
 
-  const { next_max_id, users, has_more } = parsedRes;
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-  const fetchedUsers = [
-    ...users.map((u) => ({
-      username: u.username,
-      pk: u.pk,
-      full_name: u.full_name,
-    })),
-  ];
+      while (hasNext) {
+        const variables = {
+          id: userId,
+          include_reel: true,
+          fetch_mutual: true,
+          first: 50,
+          after,
+        };
 
-  if (has_more) {
-    await setTimeout(1000 * 3);
+        const url =
+          `${INSTA_BASE_URL}/graphql/query/?` +
+          "query_hash=d04b0a864b4b54837c0d870b0e77e076&variables=" +
+          encodeURIComponent(JSON.stringify(variables));
 
-    const result = await page.evaluate(
-      async ({ headers, userId, startMaxId, INSTA_BASE_URL }) => {
-        let hasMore = true;
-        let nextMaxId = startMaxId;
-        const allUsers = [];
+        const res = await fetch(url, {
+          method: "GET",
+          headers,
+          credentials: "include",
+        });
 
-        const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+        const json = await res.json();
 
-        while (hasMore) {
-          const url = `${INSTA_BASE_URL}/api/v1/friendships/${userId}/following/?count=200&max_id=${nextMaxId}`;
+        const edgeFollow = json?.data?.user?.edge_follow;
+        if (!edgeFollow) break;
 
-          const res = await fetch(url, {
-            method: "GET",
-            headers,
-            credentials: "include",
-          });
+        hasNext = edgeFollow.page_info.has_next_page;
+        after = edgeFollow.page_info.end_cursor;
 
-          const data = await res.json();
+        followings.push(
+          ...edgeFollow.edges.map(({ node }) => ({
+            username: node.username,
+            full_name: node.full_name,
+            pk: node.id,
+          }))
+        );
 
-          allUsers.push(...data.users);
-
-          hasMore = data.has_more;
-          nextMaxId = data.next_max_id;
-
-          await sleep(3000 + Math.random() * 300);
-        }
-
-        return allUsers;
-      },
-      {
-        headers,
-        userId,
-        startMaxId: next_max_id,
-        INSTA_BASE_URL,
+        // human-like delay
+        await sleep(3000 + Math.random() * 300);
       }
-    );
-    fetchedUsers.push(
-      ...result.map((u) => ({
-        username: u.username,
-        pk: u.pk,
-        full_name: u.full_name,
-      }))
-    );
-  }
+
+      return followings;
+    },
+    {
+      headers,
+      userId,
+      INSTA_BASE_URL,
+    }
+  );
 
   console.log(`Fetched ${fetchedUsers.length} users for ${username}`);
 
@@ -168,7 +167,6 @@ async function checkFollowingAndNotify(page, ghostCursor, username) {
     console.log(`First time adding in cache for ${username}`);
 
     followingMap[username] = fetchedUsers;
-    fs.writeFileSync(`map-${i}.json`, JSON.stringify(followingMap));
 
     return;
   }
@@ -186,7 +184,7 @@ async function checkFollowingAndNotify(page, ghostCursor, username) {
 
   followingMap[username] = fetchedUsers;
 
-  fs.writeFileSync(`map-${i}.json`, JSON.stringify(followingMap));
+  //   fs.writeFileSync(`map-${i}.json`, JSON.stringify(followingMap));
 
   if (!newFollowing.length && !removedFollowing.length)
     return console.log(`No change in followers for ${username}`);

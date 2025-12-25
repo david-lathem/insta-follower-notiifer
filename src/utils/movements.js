@@ -26,7 +26,7 @@ exports.createPageWithGhostCursor = async (browser, url) => {
 };
 
 exports.performRandomMovesAndScroll = async (page, ghostCursor) => {
-  await setTimeout(1000 * 3);
+  await setTimeout(1000 * 2);
 
   ghostCursor.toggleRandomMove(false);
 
