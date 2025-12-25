@@ -36,6 +36,8 @@ const startExpressServer = async () => {
   console.log(codeVerifier);
 
   app.get("/callback", (req, res) => {
+    console.log(req.query);
+
     const { state, code } = req.query;
 
     if (!codeVerifier || !state || !sessionState || !code) {
