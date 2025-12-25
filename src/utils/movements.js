@@ -1,0 +1,65 @@
+const { installMouseHelper, createCursor } = require("ghost-cursor");
+const { setTimeout } = require("node:timers/promises");
+
+exports.createPageWithGhostCursor = async (browser, url) => {
+  const page = await browser.newPage();
+
+  //   await page.authenticate({
+  //     username: process.env.PROXY_USERNAME,
+  //     password: process.env.PROXY_PASSWORD,
+  //   });
+
+  await installMouseHelper(page);
+
+  // second options vector, third perform random moves
+  const ghostCursor = new createCursor(page, undefined, true, {
+    click: { hesitate: 1000 * 1 },
+  });
+
+  //   await page.goto(url, {
+  //     waitUntil: "networkidle0",
+  //   });
+
+  //   await this.performRandomMovesAndScroll(page, ghostCursor);
+
+  return { page, ghostCursor };
+};
+
+exports.performRandomMovesAndScroll = async (page, ghostCursor) => {
+  await setTimeout(1000 * 3);
+
+  ghostCursor.toggleRandomMove(false);
+
+  const { x, y, height } = await page.evaluate(() => ({
+    x: window.innerWidth / 2,
+    y: window.innerHeight / 2,
+    height: window.innerHeight,
+  }));
+
+  // Move cursor to approximate center with small random offset
+  await ghostCursor.moveTo({ x: x + randomOffset(), y: y + randomOffset() });
+
+  // First scroll: full height + random offsets
+  await ghostCursor.scroll(
+    { y: height + randomOffset(20) },
+    { scrollSpeed: 20 }
+  );
+
+  await setTimeout(1000 * 1);
+
+  // // Second scroll: slightly less (e.g., 70–80% of height) + random offsets
+  await ghostCursor.scroll(
+    {
+      y: height * 0.75 + randomOffset(20),
+    },
+    { scrollSpeed: 17 }
+  );
+
+  await setTimeout(1000 * 1);
+
+  await ghostCursor.scrollTo("top", { scrollSpeed: 19 });
+};
+
+function randomOffset(range = 30) {
+  return Math.floor(Math.random() * (range * 2 + 1)) - range;
+}

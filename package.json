@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "express": "node --env-file=.env src/express.js",
     "login": "node --env-file=.env src/login.js",
     "start": "node --env-file=.env src/index.js",
     "nodemon": "node --env-file=.env src/index.js"
@@ -12,7 +13,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@twitter-api-v2/plugin-token-refresher": "^1.0.0",
+    "express": "^5.2.1",
     "ghost-cursor": "^1.4.1",
-    "puppeteer": "^24.33.1"
+    "puppeteer": "^24.33.1",
+    "twitter-api-v2": "^1.28.0"
   }
 }
