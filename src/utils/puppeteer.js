@@ -1,4 +1,4 @@
-const { default: puppeteer } = require("puppeteer");
+const puppeteer = require("puppeteer");
 const { setTimeout } = require("node:timers/promises");
 const fs = require("node:fs");
 const config = require("./../../config.json");
