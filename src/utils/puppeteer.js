@@ -14,9 +14,10 @@ const followingMap = {};
 
 let i = 0;
 exports.startBrowserAndWatch = async () => {
+  console.log(process.env);
+
   const browser = await puppeteer.launch({
     headless: false,
-    // devtools: true,
     userDataDir: "./data",
     ...(process.platform === "linux" && {
       executablePath: "/usr/bin/chromium-browser",
@@ -26,8 +27,6 @@ exports.startBrowserAndWatch = async () => {
       `--proxy-server=http://${process.env.PROXY_HOST}:${process.env.PROXY_PORT}`,
     ],
   });
-
-  return;
 
   const { page, ghostCursor } = await createPageWithGhostCursor(
     browser,
