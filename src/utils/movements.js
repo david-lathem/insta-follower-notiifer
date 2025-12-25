@@ -4,10 +4,10 @@ const { setTimeout } = require("node:timers/promises");
 exports.createPageWithGhostCursor = async (browser, url) => {
   const page = await browser.newPage();
 
-  //   await page.authenticate({
-  //     username: process.env.PROXY_USERNAME,
-  //     password: process.env.PROXY_PASSWORD,
-  //   });
+  await page.authenticate({
+    username: process.env.PROXY_USERNAME,
+    password: process.env.PROXY_PASSWORD,
+  });
 
   await installMouseHelper(page);
 
@@ -16,11 +16,11 @@ exports.createPageWithGhostCursor = async (browser, url) => {
     click: { hesitate: 1000 * 1 },
   });
 
-  //   await page.goto(url, {
-  //     waitUntil: "networkidle0",
-  //   });
+  await page.goto(url, {
+    waitUntil: "networkidle0",
+  });
 
-  //   await this.performRandomMovesAndScroll(page, ghostCursor);
+  await this.performRandomMovesAndScroll(page, ghostCursor);
 
   return { page, ghostCursor };
 };

@@ -16,15 +16,15 @@ let i = 0;
 exports.startBrowserAndWatch = async () => {
   const browser = await puppeteer.launch({
     headless: false,
-    devtools: true,
+    // devtools: true,
     userDataDir: "./data",
     ...(process.platform === "linux" && {
       executablePath: "/usr/bin/chromium-browser",
     }),
-    // args: [
-    //   "--no-sandbox",
-    //   `--proxy-server=http://${process.env.PROXY_HOST}:${process.env.PROXY_PORT}`,
-    // ],
+    args: [
+      "--no-sandbox",
+      `--proxy-server=http://${process.env.PROXY_HOST}:${process.env.PROXY_PORT}`,
+    ],
   });
 
   const { page, ghostCursor } = await createPageWithGhostCursor(
@@ -62,7 +62,7 @@ exports.startBrowserAndWatch = async () => {
 
         console.log(`${username} took ${durationMs} ms`);
 
-        if (wasTweetMade) await setTimeout(1000 * 10);
+        if (wasTweetMade) await setTimeout(1000 * 60 * 15);
         if (!wasTweetMade) await setTimeout(1000 * 10);
       }
     } catch (error) {
