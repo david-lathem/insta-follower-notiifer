@@ -5,6 +5,7 @@ const config = require("./../../config.json");
 const {
   createPageWithGhostCursor,
   performRandomMovesAndScroll,
+  takeProfileSs,
 } = require("./movements");
 const { makeTweet } = require("./twitter");
 
@@ -79,6 +80,8 @@ async function checkFollowingAndNotify(page, ghostCursor, username) {
   });
 
   await performRandomMovesAndScroll(page, ghostCursor);
+
+  const image = await takeProfileSs(page);
 
   // didnt await so when waitForResponse doesnt miss api res
   ghostCursor.click(`a[href="/${username}/following/"]`).catch(console.error);
@@ -191,5 +194,5 @@ async function checkFollowingAndNotify(page, ghostCursor, username) {
   console.log(newFollowing);
   console.log(removedFollowing);
 
-  return await makeTweet(username, newFollowing, removedFollowing);
+  return await makeTweet(username, newFollowing, removedFollowing, image);
 }

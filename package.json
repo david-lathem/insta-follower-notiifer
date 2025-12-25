@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "express": "node --env-file=.env src/express.js",
+    "twitter": "node --env-file=.env src/twitter.js",
     "login": "node --env-file=.env src/login.js",
     "start": "node --env-file=.env src/index.js",
     "nodemon": "node --env-file=.env src/index.js"

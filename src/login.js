@@ -20,7 +20,9 @@ async function login() {
     password: process.env.PROXY_PASSWORD,
   });
 
-  await page.goto("https://www.instagram.com/");
+  await page.goto("https://www.instagram.com/dark_light240", {
+    waitUntil: "networkidle0",
+  });
 
   await page.setViewport({ width: 1526, height: 698 });
 }

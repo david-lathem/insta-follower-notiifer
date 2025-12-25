@@ -24,7 +24,7 @@ const startExpressServer = async () => {
     scope: [
       "tweet.read",
       "tweet.write",
-      // "media.upload",
+      "media.write",
       "users.read",
       "users.email",
       "offline.access",

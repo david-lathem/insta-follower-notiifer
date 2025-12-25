@@ -4,7 +4,7 @@ const {
 } = require("@twitter-api-v2/plugin-token-refresher");
 const fs = require("fs");
 
-const access = require("./../../access.json");
+const access = require("./../access.json");
 
 const credentials = {
   clientId: process.env.CLIENT_ID,
@@ -36,7 +36,18 @@ const twitterClient = new TwitterApi(tokenStore.accessToken, {
   plugins: [autoRefresherPlugin],
 });
 
-exports.makeTweet = async (username, newFollowing, removedFollowing, image) => {
+async function s(params) {
+  const img = fs.readFileSync("./s.png");
+
+  makeTweet(
+    "Dark",
+    [{ username: "Sport Razor", full_name: "Razor Sports" }],
+    [],
+    img
+  );
+}
+
+const makeTweet = async (username, newFollowing, removedFollowing, image) => {
   let content = `👉 ${username} started following ${newFollowing.length} and unfollowed ${removedFollowing.length}:\n\n`;
 
   if (newFollowing.length) {
@@ -55,6 +66,8 @@ exports.makeTweet = async (username, newFollowing, removedFollowing, image) => {
     })
     .catch(console.error);
 
+  console.log(mediaId);
+
   await twitterClient.v2.tweet(content, {
     ...(mediaId && { media: { media_ids: [mediaId] } }),
   });
@@ -70,3 +83,5 @@ function formatUsers(users, symbol) {
     )
     .join("\n\n");
 }
+
+s();

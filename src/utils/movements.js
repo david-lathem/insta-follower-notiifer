@@ -9,7 +9,7 @@ exports.createPageWithGhostCursor = async (browser, url) => {
     password: process.env.PROXY_PASSWORD,
   });
 
-  await installMouseHelper(page);
+  //   await installMouseHelper(page);
 
   // second options vector, third perform random moves
   const ghostCursor = new createCursor(page, undefined, true, {
@@ -58,6 +58,16 @@ exports.performRandomMovesAndScroll = async (page, ghostCursor) => {
   await setTimeout(1000 * 1);
 
   await ghostCursor.scrollTo("top", { scrollSpeed: 19 });
+};
+
+exports.takeProfileSs = async (page) => {
+  try {
+    const profile = await page.$(`header > div`);
+
+    return await profile.screenshot();
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 function randomOffset(range = 30) {
