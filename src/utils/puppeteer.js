@@ -14,8 +14,6 @@ const followingMap = {};
 
 let i = 0;
 exports.startBrowserAndWatch = async () => {
-  console.log(process.env);
-
   const browser = await puppeteer.launch({
     headless: false,
     userDataDir: "./data",
