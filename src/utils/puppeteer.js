@@ -62,8 +62,7 @@ exports.startBrowserAndWatch = async () => {
 
         console.log(`${username} took ${durationMs} ms`);
 
-        if (wasTweetMade) await setTimeout(1000 * 60 * 15);
-        if (!wasTweetMade) await setTimeout(1000 * 10);
+        await setTimeout(1000 * 10);
       }
     } catch (error) {
       console.error(error);
