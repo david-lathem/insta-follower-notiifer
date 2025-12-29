@@ -16,7 +16,7 @@ const followingMap = {};
 let i = 0;
 exports.startBrowserAndWatch = async () => {
   const browser = await puppeteer.launch({
-    headless: false,
+    // headless: false,
     userDataDir: "./data",
     ...(process.platform === "linux" && {
       executablePath: "/usr/bin/chromium-browser",
@@ -62,7 +62,7 @@ exports.startBrowserAndWatch = async () => {
 
         console.log(`${username} took ${durationMs} ms`);
 
-        await setTimeout(1000 * 10 * 60);
+        await setTimeout(1000 * 10);
       }
     } catch (error) {
       console.error(error);
