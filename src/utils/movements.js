@@ -71,11 +71,19 @@ exports.performRandomMovesAndScroll = async (page, ghostCursor) => {
 
 exports.takeProfileSs = async (page) => {
   try {
-    const profile = await page.$(`header`);
+    const profile = await page.$("header");
 
-    const b = await profile.screenshot();
+    const box = await profile.boundingBox();
 
-    fs.writeFileSync("./a.png", b);
+    const buffer = await page.screenshot({
+      clip: {
+        x: Math.floor(box.x),
+        y: Math.floor(box.y),
+        width: Math.floor(box.width),
+        height: Math.floor(box.height),
+      },
+    });
+    fs.writeFileSync("./a.png", buffer);
     return b;
   } catch (error) {
     console.error(error);
