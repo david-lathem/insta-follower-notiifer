@@ -60,6 +60,9 @@ exports.makeTweet = async (username, newFollowing, removedFollowing, image) => {
   await twitterClient.v2.tweet(content, {
     ...(mediaId && { media: { media_ids: [mediaId] } }),
   });
+
+  console.log("Made tweet");
+
   return true;
 };
 
