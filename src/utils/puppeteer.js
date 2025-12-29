@@ -62,7 +62,7 @@ exports.startBrowserAndWatch = async () => {
 
         console.log(`${username} took ${durationMs} ms`);
 
-        await setTimeout(1000 * 10);
+        await setTimeout(1000 * 10 * 60);
       }
     } catch (error) {
       console.error(error);
