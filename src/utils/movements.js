@@ -73,18 +73,8 @@ exports.takeProfileSs = async (page) => {
   try {
     const profile = await page.$("header");
 
-    const box = await profile.boundingBox();
-
-    const buffer = await page.screenshot({
-      clip: {
-        x: Math.floor(box.x),
-        y: Math.floor(box.y),
-        width: Math.floor(box.width),
-        height: Math.floor(box.height),
-      },
-      path: "a.png",
-    });
-    // fs.writeFileSync("./a.png", buffer);
+    const buffer = await profile.screenshot();
+    fs.writeFileSync("./a.png", buffer);
     return buffer;
   } catch (error) {
     console.error(error);
