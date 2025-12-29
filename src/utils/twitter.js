@@ -40,11 +40,11 @@ exports.makeTweet = async (username, newFollowing, removedFollowing, image) => {
   let content = `👉 ${username} started following ${newFollowing.length} and unfollowed ${removedFollowing.length}:\n\n`;
 
   if (newFollowing.length) {
-    content += formatUsers(newFollowing, "✅") + `\n\n`;
+    content += formatUsers(newFollowing.slice(0, 3), "✅") + `\n\n`;
   }
 
   if (removedFollowing.length) {
-    content += formatUsers(removedFollowing, "❌");
+    content += formatUsers(removedFollowing.slice(0, 3), "❌");
   }
 
   console.log(content);
