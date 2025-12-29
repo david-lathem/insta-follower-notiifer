@@ -82,9 +82,10 @@ exports.takeProfileSs = async (page) => {
         width: Math.floor(box.width),
         height: Math.floor(box.height),
       },
+      path: "a.png",
     });
-    fs.writeFileSync("./a.png", buffer);
-    return b;
+    // fs.writeFileSync("./a.png", buffer);
+    return buffer;
   } catch (error) {
     console.error(error);
   }
