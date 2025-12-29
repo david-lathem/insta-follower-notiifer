@@ -55,6 +55,8 @@ exports.makeTweet = async (username, newFollowing, removedFollowing, image) => {
     })
     .catch(console.error);
 
+  console.log(`Uploaded media with id ${mediaId}`);
+
   await twitterClient.v2.tweet(content, {
     ...(mediaId && { media: { media_ids: [mediaId] } }),
   });
