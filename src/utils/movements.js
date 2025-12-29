@@ -74,7 +74,7 @@ exports.takeProfileSs = async (page) => {
     const profile = await page.$("header");
 
     const buffer = await profile.screenshot();
-    fs.writeFileSync("./a.png", buffer);
+
     return buffer;
   } catch (error) {
     console.error(error);
