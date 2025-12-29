@@ -16,7 +16,7 @@ const followingMap = {};
 let i = 0;
 exports.startBrowserAndWatch = async () => {
   const browser = await puppeteer.launch({
-    headless: false,
+    // headless: false,
     userDataDir: "./data",
     ...(process.platform === "linux" && {
       executablePath: "/usr/bin/chromium-browser",
