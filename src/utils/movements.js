@@ -1,5 +1,6 @@
 const { installMouseHelper, createCursor } = require("ghost-cursor");
 const { setTimeout } = require("node:timers/promises");
+const fs = require("fs");
 
 exports.createPageWithGhostCursor = async (browser, url) => {
   const page = await browser.newPage();
@@ -67,7 +68,10 @@ exports.takeProfileSs = async (page) => {
   try {
     const profile = await page.$(`header`);
 
-    return await profile.screenshot();
+    const b = await profile.screenshot();
+
+    fs.writeFileSync("./a.png", b);
+    return b;
   } catch (error) {
     console.error(error);
   }
