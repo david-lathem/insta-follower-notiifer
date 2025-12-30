@@ -12,8 +12,8 @@ const { makeTweet } = require("./twitter");
 const INSTA_BASE_URL = "https://www.instagram.com";
 
 const followingMap = {};
+const indexMap = {};
 
-let i = 0;
 exports.startBrowserAndWatch = async () => {
   const browser = await puppeteer.launch({
     // headless: false,
@@ -21,10 +21,10 @@ exports.startBrowserAndWatch = async () => {
     ...(process.platform === "linux" && {
       executablePath: "/usr/bin/chromium-browser",
     }),
-    args: [
-      "--no-sandbox",
-      `--proxy-server=http://${process.env.PROXY_HOST}:${process.env.PROXY_PORT}`,
-    ],
+    // args: [
+    //   "--no-sandbox",
+    //   `--proxy-server=http://${process.env.PROXY_HOST}:${process.env.PROXY_PORT}`,
+    // ],
   });
 
   const { page, ghostCursor } = await createPageWithGhostCursor(
@@ -73,6 +73,7 @@ exports.startBrowserAndWatch = async () => {
 
 async function checkFollowingAndNotify(page, ghostCursor, username) {
   if (!followingMap[username]) followingMap[username] = [];
+  if (!indexMap[username]) indexMap = 1;
 
   await page.goto(`${INSTA_BASE_URL}/${username}`, {
     waitUntil: "domcontentloaded",
@@ -163,6 +164,13 @@ async function checkFollowingAndNotify(page, ghostCursor, username) {
   );
 
   console.log(`Fetched ${fetchedUsers.length} users for ${username}`);
+
+  fs.writeFileSync(
+    `username_${username}-${indexMap[username]}.json`,
+    JSON.stringify({ total: fetchedUsers.length, users: fetchedUsers })
+  );
+
+  indexMap[username]++;
 
   if (!followingMap[username].length) {
     console.log(`First time adding in cache for ${username}`);
