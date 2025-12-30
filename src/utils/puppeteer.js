@@ -77,7 +77,7 @@ exports.startBrowserAndWatch = async () => {
 
 async function checkFollowingAndNotify(page, ghostCursor, username) {
   if (!followingMap[username]) followingMap[username] = [];
-  if (!indexMap[username]) indexMap = 1;
+  if (!indexMap[username]) indexMap[username] = 1;
 
   await page.goto(`${INSTA_BASE_URL}/${username}`, {
     waitUntil: "domcontentloaded",
