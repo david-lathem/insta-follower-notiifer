@@ -12,7 +12,7 @@ const { makeTweet } = require("./twitter");
 const INSTA_BASE_URL = "https://www.instagram.com";
 
 const followingMap = {};
-const indexMap = {};
+let indexMap = {};
 
 exports.startBrowserAndWatch = async () => {
   const browser = await puppeteer.launch({
