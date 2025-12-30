@@ -21,10 +21,10 @@ exports.startBrowserAndWatch = async () => {
     ...(process.platform === "linux" && {
       executablePath: "/usr/bin/chromium-browser",
     }),
-    // args: [
-    //   "--no-sandbox",
-    //   `--proxy-server=http://${process.env.PROXY_HOST}:${process.env.PROXY_PORT}`,
-    // ],
+    args: [
+      "--no-sandbox",
+      `--proxy-server=http://${process.env.PROXY_HOST}:${process.env.PROXY_PORT}`,
+    ],
   });
 
   const { page, ghostCursor } = await createPageWithGhostCursor(

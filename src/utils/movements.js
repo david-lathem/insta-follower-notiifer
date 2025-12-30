@@ -13,10 +13,10 @@ exports.createPageWithGhostCursor = async (browser, url) => {
   await page.setUserAgent(
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
   );
-  // await page.authenticate({
-  //   username: process.env.PROXY_USERNAME,
-  //   password: process.env.PROXY_PASSWORD,
-  // });
+  await page.authenticate({
+    username: process.env.PROXY_USERNAME,
+    password: process.env.PROXY_PASSWORD,
+  });
 
   //   await installMouseHelper(page);
 
