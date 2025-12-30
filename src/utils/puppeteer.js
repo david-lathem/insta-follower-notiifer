@@ -51,6 +51,10 @@ exports.startBrowserAndWatch = async () => {
   while (true) {
     try {
       for (const username of config.usernames) {
+        console.log(`Scraping ${username} now!
+          
+          `);
+
         const start = Date.now();
 
         const wasTweetMade = await checkFollowingAndNotify(
